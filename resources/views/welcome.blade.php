@@ -13,7 +13,7 @@
         <link href="css/app.css" rel="stylesheet">
     </head>
     <body>
-        <div id="example" class="flex-center position-ref full-height">
+        <div id="master" class="flex-center position-ref full-height">
 
 
         </div>
