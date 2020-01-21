@@ -67,31 +67,48 @@ class App extends Component{
                         <div className="card">
                             <div className="card-header text-center font-weight-bold text-primary text-uppercase">Todo's Application</div>
                             <div className="card-body">
-                                <form onSubmit={this.onsubmitHandler}>
-                                    <div className="list-group mb-2 border-0">
-                                        <span href="#" className="list-group-item list-group-item-action">
-                                            <input type="text" className="form-control" onChange={this.onchangeHandler} name="name" aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
-                                        </span>
-                                    </div>
-                                </form>
-
-                                {/* Todo's List Start */}
-                                {
-                                    this.state.todos.map(todo=>{
-                                        return(
-                                            <div className="list-group mb-2 border-0" key={todo.id.toString()}>
-                                                <a href="#" className="list-group-item list-group-item-action" onDoubleClick={this.onDoubleClickHandler}>
-                                                    <span className="align-middle" >
-                                                        <input type="checkbox" aria-label="Checkbox for following text input" />
-                                                    </span>
-                                                    <span className="ml-3 align-middle">{todo.name}</span>
-                                                    <button className="btn btn-sm btn-outline-danger float-right" onClick={this.onDelete.bind(this, todo.id)}>Remove</button>
-                                                </a>
-                                            </div>
-                                        )
-                                    })
-                                }
-                                {/* Todo's List Start */}
+                                <table className="table">
+                                    <tbody>
+                                        <tr>
+                                            <td className="align-middle font-weight-bold" scope="row" width="3%">ADD</td>
+                                            <td colSpan="2" scope="row">
+                                                <form onSubmit={this.onsubmitHandler}>
+                                                    <input type="text" className="form-control" onChange={this.onchangeHandler} name="name" aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {/* Todo's List Start */}
+                                        {
+                                            this.state.todos.map(todo=>{
+                                                return(
+                                                    <tr key={todo.id.toString()}>
+                                                        <td scope="row" width="3%">
+                                                            <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input" />
+                                                        </td>
+                                                        <td scope="row" onDoubleClick={this.onDoubleClickHandler}>
+                                                            <span className="align-middle align-left">{todo.name}</span>
+                                                        </td>
+                                                        <td scope="row" className="align-middle" className="text-right">
+                                                            <button className="btn btn-sm btn-outline-danger float-right" onClick={this.onDelete.bind(this, todo.id)}>Remove</button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        {/* Todo's List Start */}
+                                        <tr>
+                                            <td scope="row" width="3%">
+                                                <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input" />
+                                            </td>
+                                            <td className="pt-1" scope="row">
+                                                <input type="text" className="form-control align-middle mt-0" onChange={this.onchangeHandler} name="name" aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
+                                            </td>
+                                            <td scope="row" className="align-middle" className="text-right">
+                                                <button className="btn btn-sm btn-outline-danger float-right">Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
                             </div>
 

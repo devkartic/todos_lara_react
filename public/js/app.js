@@ -68981,6 +68981,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -69091,13 +69093,17 @@ function (_Component) {
         className: "card-header text-center font-weight-bold text-primary text-uppercase"
       }, "Todo's Application"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+        className: "table"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        className: "align-middle font-weight-bold",
+        scope: "row",
+        width: "3%"
+      }, "ADD"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        colSpan: "2",
+        scope: "row"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.onsubmitHandler
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "list-group mb-2 border-0"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        href: "#",
-        className: "list-group-item list-group-item-action"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         className: "form-control",
@@ -69106,25 +69112,50 @@ function (_Component) {
         "aria-label": "Text input with dropdown button",
         placeholder: "Enter todo's here..."
       })))), this.state.todos.map(function (todo) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "list-group mb-2 border-0",
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
           key: todo.id.toString()
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          href: "#",
-          className: "list-group-item list-group-item-action",
-          onDoubleClick: _this5.onDoubleClickHandler
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-          className: "align-middle"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          scope: "row",
+          width: "3%"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
           type: "checkbox",
+          className: "align-middle align-center",
           "aria-label": "Checkbox for following text input"
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-          className: "ml-3 align-middle"
-        }, todo.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          scope: "row",
+          onDoubleClick: _this5.onDoubleClickHandler
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "align-middle align-left"
+        }, todo.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
+          scope: "row",
+          className: "align-middle"
+        }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           className: "btn btn-sm btn-outline-danger float-right",
           onClick: _this5.onDelete.bind(_this5, todo.id)
         }, "Remove")));
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        scope: "row",
+        width: "3%"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "checkbox",
+        className: "align-middle align-center",
+        "aria-label": "Checkbox for following text input"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+        className: "pt-1",
+        scope: "row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control align-middle mt-0",
+        onChange: this.onchangeHandler,
+        name: "name",
+        "aria-label": "Text input with dropdown button",
+        placeholder: "Enter todo's here..."
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
+        scope: "row",
+        className: "align-middle"
+      }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-sm btn-outline-danger float-right"
+      }, "Remove")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-footer"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row"
