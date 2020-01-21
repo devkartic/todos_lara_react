@@ -14,8 +14,11 @@ class TodoController extends Controller
      */
     public function index()
     {
-        //
+        $todos = Todo::all();
+        return response()->json($todos);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +38,13 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Todo::create([
+           'name' => $request->name
+        ]);
+
+        $todos = Todo::all();
+
+        return response()->json($todos);
     }
 
     /**
@@ -80,6 +89,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        $todos = Todo::all();
+        return response()->json($todos);
     }
 }
