@@ -69044,6 +69044,7 @@ function (_Component) {
         }
       }).then(function (response) {
         _this2.setState({
+          name: '',
           todos: response.data
         });
       });
@@ -69109,6 +69110,7 @@ function (_Component) {
         className: "form-control",
         onChange: this.onchangeHandler,
         name: "name",
+        value: this.state.name,
         "aria-label": "Text input with dropdown button",
         placeholder: "Enter todo's here..."
       })))), this.state.todos.map(function (todo) {

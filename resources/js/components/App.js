@@ -31,6 +31,7 @@ class App extends Component{
             }
         }).then(response=>{
             this.setState({
+                name : '',
                 todos : response.data
             });
         });
@@ -73,7 +74,7 @@ class App extends Component{
                                             <td className="align-middle font-weight-bold" scope="row" width="3%">ADD</td>
                                             <td colSpan="2" scope="row">
                                                 <form onSubmit={this.onsubmitHandler}>
-                                                    <input type="text" className="form-control" onChange={this.onchangeHandler} name="name" aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
+                                                    <input type="text" className="form-control" onChange={this.onchangeHandler} name="name" value={this.state.name} aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
                                                 </form>
                                             </td>
                                         </tr>
