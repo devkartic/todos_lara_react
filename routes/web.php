@@ -16,3 +16,4 @@ Route::get('/', function (){
 });
 
 Route::resource('todos', 'TodoController');
+Route::post('todos-filter', 'TodoController@filterTodos');

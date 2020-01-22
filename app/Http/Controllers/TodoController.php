@@ -19,6 +19,12 @@ class TodoController extends Controller
     }
 
 
+    public function filterTodos(Request $request){
+        $todos = Todo::all();
+        return response()->json($todos);
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -78,7 +84,12 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->name = $request->name;
+        $todo->save();
+
+        $todos = Todo::all();
+
+        return response()->json($todos);
     }
 
     /**

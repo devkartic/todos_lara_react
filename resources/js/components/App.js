@@ -8,11 +8,15 @@ class App extends Component{
         super(props);
         this.state = {
             name : '',
-            todos : []
+            todo_id : '',
+            todo_name : '',
+            todos : [],
         };
-        this.onDoubleClickHandler = this.onDoubleClickHandler.bind(this)
+
         this.onchangeHandler = this.onchangeHandler.bind(this);
         this.onsubmitHandler = this.onsubmitHandler.bind(this);
+        this.onchangeUpdateHandler = this.onchangeUpdateHandler.bind(this);
+        this.onsubmitUpdateHandler = this.onsubmitUpdateHandler.bind(this);
     }
 
     onchangeHandler(event){
@@ -20,6 +24,22 @@ class App extends Component{
             name : event.target.value
         });
     }
+
+
+/*
+    filterTodoList(filter=null){
+        axios.post('http://localhost:8000/todos-filter', {
+            filter : filter,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(response=>{
+            this.setState({
+                todos : response.data
+            });
+        });
+    }
+*/
 
 
     onsubmitHandler(event){
@@ -32,14 +52,41 @@ class App extends Component{
         }).then(response=>{
             this.setState({
                 name : '',
+                todo_id : '',
+                todo_name : '',
                 todos : response.data
             });
         });
     }
 
-    onDoubleClickHandler(event){
+
+    onDoubleClickHandler(todoInfo){
+        this.setState({
+            todo_id: todoInfo.todo_id,
+            todo_name: todoInfo.todo_name
+        });
+    }
+
+    onchangeUpdateHandler(event){
+        this.setState({
+            todo_name : event.target.value
+        });
+    }
+
+    onsubmitUpdateHandler(event){
         event.preventDefault();
-        console.log('hi');
+        axios.patch(`http://localhost:8000/todos/${this.state.todo_id}`, {
+            name : this.state.todo_name,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(response=>{
+            this.setState({
+                todo_id : '',
+                todo_name : '',
+                todos : response.data
+            });
+        });
     }
 
     componentDidMount(){
@@ -55,10 +102,13 @@ class App extends Component{
         axios.delete('http://localhost:8000/todos/'+todo_id)
             .then(response=>{
                 this.setState({
+                    todo_id : '',
                     todos: response.data
                 });
             });
     }
+
+
 
     render(){
         return(
@@ -71,7 +121,7 @@ class App extends Component{
                                 <table className="table">
                                     <tbody>
                                         <tr>
-                                            <td className="align-middle font-weight-bold" scope="row" width="3%">ADD</td>
+                                            <td className="align-middle font-weight-bold text-primary" scope="row" width="3%">ADD</td>
                                             <td colSpan="2" scope="row">
                                                 <form onSubmit={this.onsubmitHandler}>
                                                     <input type="text" className="form-control" onChange={this.onchangeHandler} name="name" value={this.state.name} aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
@@ -81,33 +131,46 @@ class App extends Component{
                                         {/* Todo's List Start */}
                                         {
                                             this.state.todos.map(todo=>{
-                                                return(
+                                                if(this.state.todo_id==todo.id) {
+                                                    return ( /* This is For Todo Edit */
+                                                        <tr key={todo.id.toString()}>
+                                                            <td className="align-middle align-center font-weight-bold text-warning" scope="row" width="3%">EDIT</td>
+                                                            <td className="pt-1" scope="row">
+                                                                <form onSubmit={this.onsubmitUpdateHandler}>
+                                                                    <input type="text" className="form-control align-middle mt-0" onChange={this.onchangeUpdateHandler} name="name" value={this.state.todo_name} aria-label="Text input with dropdown button" />
+                                                                </form>
+                                                            </td>
+                                                            <td scope="row" className="align-middle"
+                                                                className="text-right">
+                                                                <button
+                                                                    className="btn btn-sm btn-outline-danger float-right"
+                                                                    onClick={this.onDelete.bind(this, todo.id, todo.name)}>Remove
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                }
+
+                                                return ( /* This is For Todo's List */
                                                     <tr key={todo.id.toString()}>
                                                         <td scope="row" width="3%">
-                                                            <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input" />
+                                                            <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input"/>
                                                         </td>
-                                                        <td scope="row" onDoubleClick={this.onDoubleClickHandler}>
+                                                        <td scope="row" onDoubleClick={this.onDoubleClickHandler.bind(this, {todo_id : todo.id, todo_name : todo.name})}>
                                                             <span className="align-middle align-left">{todo.name}</span>
                                                         </td>
-                                                        <td scope="row" className="align-middle" className="text-right">
-                                                            <button className="btn btn-sm btn-outline-danger float-right" onClick={this.onDelete.bind(this, todo.id)}>Remove</button>
+                                                        <td scope="row" className="align-middle"
+                                                            className="text-right">
+                                                            <button
+                                                                className="btn btn-sm btn-outline-danger float-right"
+                                                                onClick={this.onDelete.bind(this, todo.id)}>Remove
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 )
                                             })
                                         }
                                         {/* Todo's List Start */}
-                                        <tr>
-                                            <td scope="row" width="3%">
-                                                <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input" />
-                                            </td>
-                                            <td className="pt-1" scope="row">
-                                                <input type="text" className="form-control align-middle mt-0" onChange={this.onchangeHandler} name="name" aria-label="Text input with dropdown button" placeholder="Enter todo's here..." />
-                                            </td>
-                                            <td scope="row" className="align-middle" className="text-right">
-                                                <button className="btn btn-sm btn-outline-danger float-right">Remove</button>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
 
