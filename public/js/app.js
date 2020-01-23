@@ -69038,22 +69038,24 @@ function (_Component) {
   }, {
     key: "todoFilteringHandler",
     value: function todoFilteringHandler() {
-      var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      console.log(9999); // axios.post('http://localhost:8000/todos-filter', {
-      //     filter : filter,
-      //     headers: {
-      //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      //     }
-      // }).then(response=>{
-      //     this.setState({
-      //         todos : response.data
-      //     });
-      // });
+      var _this2 = this;
+
+      var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('http://localhost:8000/todos-filter', {
+        filter: filter,
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      }).then(function (response) {
+        _this2.setState({
+          todos: response.data
+        });
+      });
     }
   }, {
     key: "onsubmitHandler",
     value: function onsubmitHandler(event) {
-      var _this2 = this;
+      var _this3 = this;
 
       event.preventDefault();
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('http://localhost:8000/todos', {
@@ -69062,7 +69064,7 @@ function (_Component) {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       }).then(function (response) {
-        _this2.setState({
+        _this3.setState({
           name: '',
           todo_id: '',
           todo_name: '',
@@ -69088,7 +69090,7 @@ function (_Component) {
   }, {
     key: "onsubmitUpdateHandler",
     value: function onsubmitUpdateHandler(event) {
-      var _this3 = this;
+      var _this4 = this;
 
       event.preventDefault();
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.patch("http://localhost:8000/todos/".concat(this.state.todo_id), {
@@ -69097,7 +69099,7 @@ function (_Component) {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       }).then(function (response) {
-        _this3.setState({
+        _this4.setState({
           todo_id: '',
           todo_name: '',
           todos: response.data
@@ -69112,7 +69114,7 @@ function (_Component) {
   }, {
     key: "toggleChangeHandler",
     value: function toggleChangeHandler(todo_id) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://localhost:8000/todos/update", {
         todo_id: todo_id,
@@ -69120,7 +69122,7 @@ function (_Component) {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       }).then(function (response) {
-        _this4.setState({
+        _this5.setState({
           todos: response.data
         });
       });
@@ -69128,10 +69130,10 @@ function (_Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('http://localhost:8000/todos').then(function (response) {
-        _this5.setState({
+        _this6.setState({
           name: '',
           todo_id: '',
           todo_name: '',
@@ -69142,10 +69144,10 @@ function (_Component) {
   }, {
     key: "onDelete",
     value: function onDelete(todo_id) {
-      var _this6 = this;
+      var _this7 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a["delete"]('http://localhost:8000/todos/' + todo_id).then(function (response) {
-        _this6.setState({
+        _this7.setState({
           todo_id: '',
           todo_name: '',
           todos: response.data
@@ -69155,7 +69157,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this7 = this;
+      var _this8 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
@@ -69189,7 +69191,7 @@ function (_Component) {
         "aria-label": "Text input with dropdown button",
         placeholder: "Enter todo's here..."
       })))), this.state.todos.map(function (todo) {
-        if (_this7.state.todo_id == todo.id) {
+        if (_this8.state.todo_id == todo.id) {
           return (
             /* This is For Todo Edit */
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
@@ -69203,24 +69205,24 @@ function (_Component) {
               scope: "row"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
               ref: "editForm",
-              onSubmit: _this7.onsubmitUpdateHandler
+              onSubmit: _this8.onsubmitUpdateHandler
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
               type: "text",
               ref: function ref(input) {
                 return input && input.focus();
               },
               className: "form-control align-middle mt-0",
-              onBlur: _this7.onblurUpdateHandler.bind(_this7),
-              onChange: _this7.onchangeUpdateHandler,
+              onBlur: _this8.onblurUpdateHandler.bind(_this8),
+              onChange: _this8.onchangeUpdateHandler,
               name: "name",
-              value: _this7.state.todo_name,
+              value: _this8.state.todo_name,
               "aria-label": "Text input with dropdown button"
             }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
               scope: "row",
               className: "align-middle"
             }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "btn btn-sm btn-outline-danger float-right",
-              onClick: _this7.onDelete.bind(_this7, todo.id, todo.name)
+              onClick: _this8.onDelete.bind(_this8, todo.id, todo.name)
             }, "Remove")))
           );
         }
@@ -69236,11 +69238,11 @@ function (_Component) {
             type: "checkbox",
             className: "align-middle align-center",
             checked: todo.status == 1 ? true : false,
-            onChange: _this7.toggleChangeHandler.bind(_this7, todo.id),
+            onChange: _this8.toggleChangeHandler.bind(_this8, todo.id),
             "aria-label": "Checkbox for following text input"
           })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
             scope: "row",
-            onDoubleClick: _this7.onDoubleClickHandler.bind(_this7, {
+            onDoubleClick: _this8.onDoubleClickHandler.bind(_this8, {
               todo_id: todo.id,
               todo_name: todo.name
             })
@@ -69251,7 +69253,7 @@ function (_Component) {
             className: "align-middle"
           }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "btn btn-sm btn-outline-danger float-right",
-            onClick: _this7.onDelete.bind(_this7, todo.id)
+            onClick: _this8.onDelete.bind(_this8, todo.id)
           }, "Remove")))
         );
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -69264,13 +69266,13 @@ function (_Component) {
         className: "col-8"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light float-left",
-        onClick: this.todoFilteringHandler
+        onClick: this.todoFilteringHandler.bind(this, '')
       }, "All"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light ml-5",
-        onClick: this.todoFilteringHandler
+        onClick: this.todoFilteringHandler.bind(this, 0)
       }, "Active"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light ml-5",
-        onClick: this.todoFilteringHandler
+        onClick: this.todoFilteringHandler.bind(this, 1)
       }, "Completed"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light float-right"
       }, "Clear Completed"))))))));

@@ -14,13 +14,19 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos = Todo::all();
+        $todos = Todo::where('deleted_at', null)->get();
         return response()->json($todos);
     }
 
 
-    public function filterTodos(Request $request){
-        $todos = Todo::all();
+    public function filteringTodos(Request $request){
+        $filter = $request->filter;
+        $todos = Todo::where('deleted_at', null);
+        if(isset($filter)){
+            $todos = $todos->where('status', $filter);
+        }
+        $todos = $todos->get();
+
         return response()->json($todos);
     }
 
@@ -48,7 +54,7 @@ class TodoController extends Controller
            'name' => $request->name
         ]);
 
-        $todos = Todo::all();
+        $todos = Todo::where('deleted_at', null)->get();
 
         return response()->json($todos);
     }
@@ -87,7 +93,7 @@ class TodoController extends Controller
         $todo->name = $request->name;
         $todo->save();
 
-        $todos = Todo::all();
+        $todos = Todo::where('deleted_at', null)->get();
 
         return response()->json($todos);
     }
@@ -102,7 +108,7 @@ class TodoController extends Controller
         }
         $todo->save();
 
-        $todos = Todo::all();
+        $todos = Todo::where('deleted_at', null)->get();
 
         return response()->json($todos);
     }
@@ -116,7 +122,7 @@ class TodoController extends Controller
     public function destroy(Todo $todo)
     {
         $todo->delete();
-        $todos = Todo::all();
+        $todos = Todo::where('deleted_at', null)->get();;
         return response()->json($todos);
     }
 }

@@ -28,18 +28,17 @@ class App extends Component{
 
 
 
-    todoFilteringHandler(filter=''){
-        console.log(9999);
-        // axios.post('http://localhost:8000/todos-filter', {
-        //     filter : filter,
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // }).then(response=>{
-        //     this.setState({
-        //         todos : response.data
-        //     });
-        // });
+    todoFilteringHandler(filter=null){
+        axios.post('http://localhost:8000/todos-filter', {
+            filter : filter,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(response=>{
+            this.setState({
+                todos : response.data
+            });
+        });
     }
 
     onsubmitHandler(event){
@@ -203,9 +202,9 @@ class App extends Component{
                                 <div className="row">
                                     <div className="col-4">{this.state.todos.length} item left</div>
                                     <div className="col-8">
-                                        <button className="btn btn-light float-left" onClick={this.todoFilteringHandler}>All</button>
-                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler}>Active</button>
-                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler}>Completed</button>
+                                        <button className="btn btn-light float-left" onClick={this.todoFilteringHandler.bind(this, '')}>All</button>
+                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler.bind(this, 0)}>Active</button>
+                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler.bind(this, 1)}>Completed</button>
                                         <button className="btn btn-light float-right">Clear Completed</button>
                                     </div>
                                 </div>
