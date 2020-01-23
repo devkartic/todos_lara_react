@@ -17,6 +17,7 @@ class App extends Component{
         this.onsubmitHandler = this.onsubmitHandler.bind(this);
         this.onchangeUpdateHandler = this.onchangeUpdateHandler.bind(this);
         this.onsubmitUpdateHandler = this.onsubmitUpdateHandler.bind(this);
+        this.todoFilteringHandler = this.todoFilteringHandler.bind(this);
     }
 
     onchangeHandler(event){
@@ -26,21 +27,20 @@ class App extends Component{
     }
 
 
-/*
-    filterTodoList(filter=null){
-        axios.post('http://localhost:8000/todos-filter', {
-            filter : filter,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        }).then(response=>{
-            this.setState({
-                todos : response.data
-            });
-        });
-    }
-*/
 
+    todoFilteringHandler(filter=''){
+        console.log(9999);
+        // axios.post('http://localhost:8000/todos-filter', {
+        //     filter : filter,
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // }).then(response=>{
+        //     this.setState({
+        //         todos : response.data
+        //     });
+        // });
+    }
 
     onsubmitHandler(event){
         event.preventDefault();
@@ -89,10 +89,30 @@ class App extends Component{
         });
     }
 
+    onblurUpdateHandler(event){
+        this.onsubmitUpdateHandler(event)
+    }
+
+    toggleChangeHandler(todo_id){
+        axios.post(`http://localhost:8000/todos/update`, {
+            todo_id : todo_id,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(response=>{
+            this.setState({
+                todos : response.data
+            });
+        });
+    }
+
     componentDidMount(){
         axios.get('http://localhost:8000/todos')
             .then(response=>{
                 this.setState({
+                    name : '',
+                    todo_id : '',
+                    todo_name : '',
                     todos: response.data
                 });
             });
@@ -103,6 +123,7 @@ class App extends Component{
             .then(response=>{
                 this.setState({
                     todo_id : '',
+                    todo_name : '',
                     todos: response.data
                 });
             });
@@ -116,7 +137,7 @@ class App extends Component{
                 <div className="row justify-content-center">
                     <div className="col-md-8">
                         <div className="card">
-                            <div className="card-header text-center font-weight-bold text-primary text-uppercase">Todo's Application</div>
+                            <div className="card-header text-center font-weight-bold text-success text-uppercase">Todo's Application</div>
                             <div className="card-body">
                                 <table className="table">
                                     <tbody>
@@ -135,9 +156,9 @@ class App extends Component{
                                                     return ( /* This is For Todo Edit */
                                                         <tr key={todo.id.toString()}>
                                                             <td className="align-middle align-center font-weight-bold text-warning" scope="row" width="3%">EDIT</td>
-                                                            <td className="pt-1" scope="row">
-                                                                <form onSubmit={this.onsubmitUpdateHandler}>
-                                                                    <input type="text" className="form-control align-middle mt-0" onChange={this.onchangeUpdateHandler} name="name" value={this.state.todo_name} aria-label="Text input with dropdown button" />
+                                                            <td className="pt-2" scope="row">
+                                                                <form ref="editForm" onSubmit={this.onsubmitUpdateHandler}>
+                                                                    <input type="text" ref={input => input && input.focus()} className="form-control align-middle mt-0" onBlur={this.onblurUpdateHandler.bind(this)} onChange={this.onchangeUpdateHandler} name="name" value={this.state.todo_name} aria-label="Text input with dropdown button" />
                                                                 </form>
                                                             </td>
                                                             <td scope="row" className="align-middle"
@@ -154,7 +175,8 @@ class App extends Component{
                                                 return ( /* This is For Todo's List */
                                                     <tr key={todo.id.toString()}>
                                                         <td scope="row" width="3%">
-                                                            <input type="checkbox" className="align-middle align-center" aria-label="Checkbox for following text input"/>
+                                                            <input type="checkbox" className="align-middle align-center" checked={todo.status==1?true:false}
+                                                                   onChange={this.toggleChangeHandler.bind(this, todo.id)} aria-label="Checkbox for following text input"/>
                                                         </td>
                                                         <td scope="row" onDoubleClick={this.onDoubleClickHandler.bind(this, {todo_id : todo.id, todo_name : todo.name})}>
                                                             <span className="align-middle align-left">{todo.name}</span>
@@ -181,9 +203,9 @@ class App extends Component{
                                 <div className="row">
                                     <div className="col-4">{this.state.todos.length} item left</div>
                                     <div className="col-8">
-                                        <button className="btn btn-light float-left">All</button>
-                                        <button className="btn btn-light ml-5">Active</button>
-                                        <button className="btn btn-light ml-5">Completed</button>
+                                        <button className="btn btn-light float-left" onClick={this.todoFilteringHandler}>All</button>
+                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler}>Active</button>
+                                        <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler}>Completed</button>
                                         <button className="btn btn-light float-right">Clear Completed</button>
                                     </div>
                                 </div>

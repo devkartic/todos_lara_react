@@ -92,6 +92,21 @@ class TodoController extends Controller
         return response()->json($todos);
     }
 
+    public function updateTodo(Request $request)
+    {
+        $todo = Todo::find($request->todo_id);
+        if($todo->status==1) {
+            $todo->status = 0;
+        } else{
+            $todo->status = 1;
+        }
+        $todo->save();
+
+        $todos = Todo::all();
+
+        return response()->json($todos);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

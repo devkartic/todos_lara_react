@@ -69024,6 +69024,7 @@ function (_Component) {
     _this.onsubmitHandler = _this.onsubmitHandler.bind(_assertThisInitialized(_this));
     _this.onchangeUpdateHandler = _this.onchangeUpdateHandler.bind(_assertThisInitialized(_this));
     _this.onsubmitUpdateHandler = _this.onsubmitUpdateHandler.bind(_assertThisInitialized(_this));
+    _this.todoFilteringHandler = _this.todoFilteringHandler.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -69034,21 +69035,21 @@ function (_Component) {
         name: event.target.value
       });
     }
-    /*
-        filterTodoList(filter=null){
-            axios.post('http://localhost:8000/todos-filter', {
-                filter : filter,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            }).then(response=>{
-                this.setState({
-                    todos : response.data
-                });
-            });
-        }
-    */
-
+  }, {
+    key: "todoFilteringHandler",
+    value: function todoFilteringHandler() {
+      var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      console.log(9999); // axios.post('http://localhost:8000/todos-filter', {
+      //     filter : filter,
+      //     headers: {
+      //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      //     }
+      // }).then(response=>{
+      //     this.setState({
+      //         todos : response.data
+      //     });
+      // });
+    }
   }, {
     key: "onsubmitHandler",
     value: function onsubmitHandler(event) {
@@ -69104,12 +69105,36 @@ function (_Component) {
       });
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "onblurUpdateHandler",
+    value: function onblurUpdateHandler(event) {
+      this.onsubmitUpdateHandler(event);
+    }
+  }, {
+    key: "toggleChangeHandler",
+    value: function toggleChangeHandler(todo_id) {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('http://localhost:8000/todos').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://localhost:8000/todos/update", {
+        todo_id: todo_id,
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      }).then(function (response) {
         _this4.setState({
+          todos: response.data
+        });
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this5 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('http://localhost:8000/todos').then(function (response) {
+        _this5.setState({
+          name: '',
+          todo_id: '',
+          todo_name: '',
           todos: response.data
         });
       });
@@ -69117,11 +69142,12 @@ function (_Component) {
   }, {
     key: "onDelete",
     value: function onDelete(todo_id) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_2___default.a["delete"]('http://localhost:8000/todos/' + todo_id).then(function (response) {
-        _this5.setState({
+        _this6.setState({
           todo_id: '',
+          todo_name: '',
           todos: response.data
         });
       });
@@ -69129,7 +69155,7 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
@@ -69140,7 +69166,7 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header text-center font-weight-bold text-primary text-uppercase"
+        className: "card-header text-center font-weight-bold text-success text-uppercase"
       }, "Todo's Application"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
@@ -69163,7 +69189,7 @@ function (_Component) {
         "aria-label": "Text input with dropdown button",
         placeholder: "Enter todo's here..."
       })))), this.state.todos.map(function (todo) {
-        if (_this6.state.todo_id == todo.id) {
+        if (_this7.state.todo_id == todo.id) {
           return (
             /* This is For Todo Edit */
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
@@ -69173,23 +69199,28 @@ function (_Component) {
               scope: "row",
               width: "3%"
             }, "EDIT"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-              className: "pt-1",
+              className: "pt-2",
               scope: "row"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-              onSubmit: _this6.onsubmitUpdateHandler
+              ref: "editForm",
+              onSubmit: _this7.onsubmitUpdateHandler
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
               type: "text",
+              ref: function ref(input) {
+                return input && input.focus();
+              },
               className: "form-control align-middle mt-0",
-              onChange: _this6.onchangeUpdateHandler,
+              onBlur: _this7.onblurUpdateHandler.bind(_this7),
+              onChange: _this7.onchangeUpdateHandler,
               name: "name",
-              value: _this6.state.todo_name,
+              value: _this7.state.todo_name,
               "aria-label": "Text input with dropdown button"
             }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
               scope: "row",
               className: "align-middle"
             }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "btn btn-sm btn-outline-danger float-right",
-              onClick: _this6.onDelete.bind(_this6, todo.id, todo.name)
+              onClick: _this7.onDelete.bind(_this7, todo.id, todo.name)
             }, "Remove")))
           );
         }
@@ -69204,10 +69235,12 @@ function (_Component) {
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
             type: "checkbox",
             className: "align-middle align-center",
+            checked: todo.status == 1 ? true : false,
+            onChange: _this7.toggleChangeHandler.bind(_this7, todo.id),
             "aria-label": "Checkbox for following text input"
           })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
             scope: "row",
-            onDoubleClick: _this6.onDoubleClickHandler.bind(_this6, {
+            onDoubleClick: _this7.onDoubleClickHandler.bind(_this7, {
               todo_id: todo.id,
               todo_name: todo.name
             })
@@ -69218,7 +69251,7 @@ function (_Component) {
             className: "align-middle"
           }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "btn btn-sm btn-outline-danger float-right",
-            onClick: _this6.onDelete.bind(_this6, todo.id)
+            onClick: _this7.onDelete.bind(_this7, todo.id)
           }, "Remove")))
         );
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -69230,11 +69263,14 @@ function (_Component) {
       }, this.state.todos.length, " item left"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col-8"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-light float-left"
+        className: "btn btn-light float-left",
+        onClick: this.todoFilteringHandler
       }, "All"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-light ml-5"
+        className: "btn btn-light ml-5",
+        onClick: this.todoFilteringHandler
       }, "Active"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-light ml-5"
+        className: "btn btn-light ml-5",
+        onClick: this.todoFilteringHandler
       }, "Completed"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light float-right"
       }, "Clear Completed"))))))));
