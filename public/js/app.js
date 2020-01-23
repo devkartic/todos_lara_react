@@ -69191,6 +69191,14 @@ function (_Component) {
         "aria-label": "Text input with dropdown button",
         placeholder: "Enter todo's here..."
       })))), this.state.todos.map(function (todo) {
+        var todoPrint = '';
+
+        if (todo.status == 1) {
+          todoPrint = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("del", null, todo.name);
+        } else {
+          todoPrint = todo.name;
+        }
+
         if (_this8.state.todo_id == todo.id) {
           return (
             /* This is For Todo Edit */
@@ -69248,7 +69256,7 @@ function (_Component) {
             })
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
             className: "align-middle align-left"
-          }, todo.name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
+          }, todoPrint)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
             scope: "row",
             className: "align-middle"
           }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {

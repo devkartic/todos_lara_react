@@ -151,6 +151,12 @@ class App extends Component{
                                         {/* Todo's List Start */}
                                         {
                                             this.state.todos.map(todo=>{
+                                                let todoPrint = '';
+                                                if (todo.status==1) {
+                                                    todoPrint = <del>{todo.name}</del>;
+                                                } else {
+                                                    todoPrint = todo.name;
+                                                }
                                                 if(this.state.todo_id==todo.id) {
                                                     return ( /* This is For Todo Edit */
                                                         <tr key={todo.id.toString()}>
@@ -178,7 +184,7 @@ class App extends Component{
                                                                    onChange={this.toggleChangeHandler.bind(this, todo.id)} aria-label="Checkbox for following text input"/>
                                                         </td>
                                                         <td scope="row" onDoubleClick={this.onDoubleClickHandler.bind(this, {todo_id : todo.id, todo_name : todo.name})}>
-                                                            <span className="align-middle align-left">{todo.name}</span>
+                                                            <span className="align-middle align-left">{todoPrint}</span>
                                                         </td>
                                                         <td scope="row" className="align-middle"
                                                             className="text-right">
