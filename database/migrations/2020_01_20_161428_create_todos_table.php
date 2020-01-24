@@ -17,7 +17,6 @@ class CreateTodosTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->tinyInteger('status')->default(0);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

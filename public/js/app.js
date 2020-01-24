@@ -69018,7 +69018,8 @@ function (_Component) {
       name: '',
       todo_id: '',
       todo_name: '',
-      todos: []
+      todos: [],
+      isClear: false
     };
     _this.onchangeHandler = _this.onchangeHandler.bind(_assertThisInitialized(_this));
     _this.onsubmitHandler = _this.onsubmitHandler.bind(_assertThisInitialized(_this));
@@ -69041,6 +69042,17 @@ function (_Component) {
       var _this2 = this;
 
       var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      if (filter === 1) {
+        this.setState({
+          isClear: true
+        });
+      } else {
+        this.setState({
+          isClear: false
+        });
+      }
+
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.post('http://localhost:8000/todos-filter', {
         filter: filter,
         headers: {
@@ -69155,10 +69167,31 @@ function (_Component) {
       });
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "clearCompleteHandler",
+    value: function clearCompleteHandler(event) {
       var _this8 = this;
 
+      event.preventDefault();
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.post("http://localhost:8000/todos/clear", {
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      }).then(function (response) {
+        _this8.setState({
+          todos: response.data
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this9 = this;
+
+      var clearCompleteBtn = '';
+      if (this.state.isClear == true) clearCompleteBtn = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        className: "btn btn-light float-right",
+        onClick: this.clearCompleteHandler.bind(this)
+      }, "Clear Completed");
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -69199,7 +69232,7 @@ function (_Component) {
           todoPrint = todo.name;
         }
 
-        if (_this8.state.todo_id == todo.id) {
+        if (_this9.state.todo_id == todo.id) {
           return (
             /* This is For Todo Edit */
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
@@ -69213,24 +69246,24 @@ function (_Component) {
               scope: "row"
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
               ref: "editForm",
-              onSubmit: _this8.onsubmitUpdateHandler
+              onSubmit: _this9.onsubmitUpdateHandler
             }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
               type: "text",
               ref: function ref(input) {
                 return input && input.focus();
               },
               className: "form-control align-middle mt-0",
-              onBlur: _this8.onblurUpdateHandler.bind(_this8),
-              onChange: _this8.onchangeUpdateHandler,
+              onBlur: _this9.onblurUpdateHandler.bind(_this9),
+              onChange: _this9.onchangeUpdateHandler,
               name: "name",
-              value: _this8.state.todo_name,
+              value: _this9.state.todo_name,
               "aria-label": "Text input with dropdown button"
             }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", _defineProperty({
               scope: "row",
               className: "align-middle"
             }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
               className: "btn btn-sm btn-outline-danger float-right",
-              onClick: _this8.onDelete.bind(_this8, todo.id, todo.name)
+              onClick: _this9.onDelete.bind(_this9, todo.id, todo.name)
             }, "Remove")))
           );
         }
@@ -69246,11 +69279,11 @@ function (_Component) {
             type: "checkbox",
             className: "align-middle align-center",
             checked: todo.status == 1 ? true : false,
-            onChange: _this8.toggleChangeHandler.bind(_this8, todo.id),
+            onChange: _this9.toggleChangeHandler.bind(_this9, todo.id),
             "aria-label": "Checkbox for following text input"
           })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
             scope: "row",
-            onDoubleClick: _this8.onDoubleClickHandler.bind(_this8, {
+            onDoubleClick: _this9.onDoubleClickHandler.bind(_this9, {
               todo_id: todo.id,
               todo_name: todo.name
             })
@@ -69261,7 +69294,7 @@ function (_Component) {
             className: "align-middle"
           }, "className", "text-right"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
             className: "btn btn-sm btn-outline-danger float-right",
-            onClick: _this8.onDelete.bind(_this8, todo.id)
+            onClick: _this9.onDelete.bind(_this9, todo.id)
           }, "Remove")))
         );
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -69281,9 +69314,7 @@ function (_Component) {
       }, "Active"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-light ml-5",
         onClick: this.todoFilteringHandler.bind(this, 1)
-      }, "Completed"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-light float-right"
-      }, "Clear Completed"))))))));
+      }, "Completed"), clearCompleteBtn)))))));
     }
   }]);
 

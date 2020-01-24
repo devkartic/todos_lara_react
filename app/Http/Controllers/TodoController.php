@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $todos = Todo::where('deleted_at', null)->get();
+        $todos = Todo::all();
         return response()->json($todos);
     }
 
@@ -50,11 +50,16 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => ['required', 'unique:todos', 'string', 'max:191'],
+        ]);
+
+
         Todo::create([
            'name' => $request->name
         ]);
 
-        $todos = Todo::where('deleted_at', null)->get();
+        $todos = Todo::all();
 
         return response()->json($todos);
     }
@@ -93,7 +98,7 @@ class TodoController extends Controller
         $todo->name = $request->name;
         $todo->save();
 
-        $todos = Todo::where('deleted_at', null)->get();
+        $todos = Todo::all();
 
         return response()->json($todos);
     }
@@ -108,7 +113,7 @@ class TodoController extends Controller
         }
         $todo->save();
 
-        $todos = Todo::where('deleted_at', null)->get();
+        $todos = Todo::all();
 
         return response()->json($todos);
     }
@@ -119,10 +124,17 @@ class TodoController extends Controller
      * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
+
+    public function clearCompleted(Request $request){
+        Todo::where('status', 1)->delete();
+        $todos = Todo::where('status', 1)->get();
+        return response()->json($todos);
+    }
+
     public function destroy(Todo $todo)
     {
         $todo->delete();
-        $todos = Todo::where('deleted_at', null)->get();;
+        $todos = Todo::all();
         return response()->json($todos);
     }
 }

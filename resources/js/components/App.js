@@ -11,6 +11,7 @@ class App extends Component{
             todo_id : '',
             todo_name : '',
             todos : [],
+            isClear : false
         };
 
         this.onchangeHandler = this.onchangeHandler.bind(this);
@@ -29,6 +30,11 @@ class App extends Component{
 
 
     todoFilteringHandler(filter=null){
+        if(filter===1) {
+            this.setState({isClear:true});
+        } else{
+            this.setState({isClear:false});
+        }
         axios.post('http://localhost:8000/todos-filter', {
             filter : filter,
             headers: {
@@ -129,8 +135,24 @@ class App extends Component{
     }
 
 
+    clearCompleteHandler(event){
+        event.preventDefault();
+        axios.post(`http://localhost:8000/todos/clear`, {
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(response=>{
+            this.setState({
+                todos : response.data
+            });
+        });
+    }
+
+
 
     render(){
+        let clearCompleteBtn =''
+        if(this.state.isClear==true) clearCompleteBtn = <button className="btn btn-light float-right" onClick={this.clearCompleteHandler.bind(this)}>Clear Completed</button>;
         return(
             <div className="container">
                 <div className="row justify-content-center">
@@ -211,7 +233,7 @@ class App extends Component{
                                         <button className="btn btn-light float-left" onClick={this.todoFilteringHandler.bind(this, '')}>All</button>
                                         <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler.bind(this, 0)}>Active</button>
                                         <button className="btn btn-light ml-5" onClick={this.todoFilteringHandler.bind(this, 1)}>Completed</button>
-                                        <button className="btn btn-light float-right">Clear Completed</button>
+                                        {clearCompleteBtn}
                                     </div>
                                 </div>
                             </div>

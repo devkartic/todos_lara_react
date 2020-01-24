@@ -18,3 +18,4 @@ Route::get('/', function (){
 Route::resource('todos', 'TodoController');
 Route::post('todos-filter', 'TodoController@filteringTodos');
 Route::post('todos/update', 'TodoController@updateTodo');
+Route::post('todos/clear', 'TodoController@clearCompleted');
