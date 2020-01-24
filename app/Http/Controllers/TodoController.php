@@ -21,11 +21,12 @@ class TodoController extends Controller
 
     public function filteringTodos(Request $request){
         $filter = $request->filter;
-        $todos = Todo::where('deleted_at', null);
+
         if(isset($filter)){
-            $todos = $todos->where('status', $filter);
+            $todos = Todo::where('status', $filter)->get();
+        } else{
+            $todos = Todo::all();
         }
-        $todos = $todos->get();
 
         return response()->json($todos);
     }
@@ -50,11 +51,6 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'unique:todos', 'string', 'max:191'],
-        ]);
-
-
         Todo::create([
            'name' => $request->name
         ]);
